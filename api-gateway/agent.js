@@ -99,7 +99,7 @@ db.collection('messages').onSnapshot(snapshot => {
             let botResponse = "Sorry, I couldn't understand your request.";
 
             try {
-                if (intent === "query-bill") {
+                if (intent === "bill") {
                     const res = await axios.get(`${process.env.SPRING_API_GATEWAY}/api/v1/bill?subscriberNo=${subscriberId}&month=${month}&year=${year}`, { headers });
                     const bill = res.data;
                     botResponse = `Bill Summary:
@@ -109,7 +109,7 @@ db.collection('messages').onSnapshot(snapshot => {
 
 Would you like to see the detailed bill or proceed with payment?`;
 
-                } else if (intent === "query-bill-detailed") {
+                } else if (intent === "bill-detailed") {
                     const res = await axios.get(`${process.env.SPRING_API_GATEWAY}/api/v1/bill-detailed?month=${month}&year=${year}&page=0&size=10`, { headers });
                     const detail = res.data.content?.[0] || {};
                     botResponse = `Bill Details for ${month} ${year}:
@@ -117,7 +117,7 @@ Would you like to see the detailed bill or proceed with payment?`;
 - Amount: ${detail.amount} ${detail.unit}
 - Total Billed: $${detail.billTotalAmount || 0}`;
 
-                } else if (intent === "make-payment") {
+                } else if (intent === "pay") {
                     if (!amount) {
                         botResponse = "Please specify an amount for payment.";
                     } else {
