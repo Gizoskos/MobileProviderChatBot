@@ -12,18 +12,25 @@ function Chat() {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setMessages(data);
-            // If last message came from the user and handled false means bot is thinking
-            const lastMsg = data[data.length - 1];
-            if (lastMsg?.sender === "user" && lastMsg?.handled === false) {
-                setBotThinking(true);
-            }
-            // If bot message has handled turn off thinking
-            if (data.some((msg) => msg.sender === "bot" && msg.createdAt)) {
+
+            // find last user and bot msg
+            const lastUserMsg = [...data].reverse().find(msg => msg.sender === "user");
+            const lastBotMsg = [...data].reverse().find(msg => msg.sender === "bot");
+
+            // If there is last user message and bot still havent answered yet.
+            if (lastUserMsg && !lastUserMsg.handled) {
+                // Bot yanıtı henüz gelmemişse "thinking" durumuna gir
+                if (!lastBotMsg || new Date(lastBotMsg.createdAt?.toDate?.() ?? 0) < new Date(lastUserMsg.createdAt?.toDate?.() ?? 0)) {
+                    setBotThinking(true);
+                }
+            } else {
                 setBotThinking(false);
             }
         });
+
         return () => unsubscribe();
     }, []);
+
     const sendMessage = async () => {
         if (!text.trim()) return;
         await addDoc(collection(db, "messages"), {
@@ -40,20 +47,23 @@ function Chat() {
         <div style={styles.container}>
             <h2>💬 Mobile Provider Chatbot</h2>
             <div style={styles.chatBox}>
-                {messages.map((msg) => (
-                    <div
-                        key={msg.id}
-                        style={{
-                            ...styles.message,
-                            alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
+                {messages.map(msg => (
+                    <div key={msg.id} style={{ alignSelf: msg.sender === "user" ? "flex-end" : "flex-start" }}>
+                        {msg.replyTo && (
+                            <div style={{ fontSize: "0.8rem", color: "#888" }}>
+                                ↪ replying to message: {messages.find(m => m.id === msg.replyTo)?.text || "message"}
+                            </div>
+                        )}
+                        <div style={{
                             backgroundColor: msg.sender === "user" ? "#cce5ff" : "#f1f1f1",
-                        }}
-                    >
-                        <strong>{msg.sender === "user" ? "You" : "Bot"}:</strong> {msg.text}
+                            padding: "10px", borderRadius: "10px", marginTop: "5px"
+                        }}>
+                            <strong>{msg.sender === "user" ? "You" : "Bot"}:</strong> {msg.text}
+                        </div>
                     </div>
                 ))}
                 {botThinking && (
-                    <div style={{ ...styles.message, backgroundColor: "#f1f1f1" }}>
+                    <div style={{ fontStyle: 'italic', color: 'pink', alignSelf: 'flex-start' }}>
                         Bot is thinking...
                     </div>
                 )}
@@ -91,11 +101,6 @@ const styles = {
         gap: 10,
         backgroundColor: "#fff",
     },
-    message: {
-        padding: "10px 12px",
-        borderRadius: 10,
-        maxWidth: "80%",
-    },
     inputArea: {
         display: "flex",
         gap: 10,
@@ -115,4 +120,5 @@ const styles = {
         cursor: "pointer",
     },
 };
+
 export default Chat;
