@@ -5,8 +5,8 @@ const axios = require('axios');
 const { fetchJwtToken, getJwtToken } = require('./auth');
 let botResponse = null;
 // Firebase setup
-initializeApp({ credential: cert(JSON.parse(process.env.FIREBASE_CREDENTIAL)) });
-firebaseCredential.private_key = firebaseCredential.private_key.replace(/\\n/g, '\n');
+const serviceAccount = require("/etc/secrets/firebase-key.json");
+initializeApp({ credential: cert(serviceAccount) });
 const db = getFirestore();
 
 // Fetch JWT initially and then every 10 minutes
