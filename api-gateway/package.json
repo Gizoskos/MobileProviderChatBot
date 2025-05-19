@@ -1,9 +1,11 @@
 {
-  "name": "api-gateway",
+  "name": "chatbot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "gateway.js",
   "scripts": {
+    "start": "node gateway.js",
+    "client": "npm run build --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
