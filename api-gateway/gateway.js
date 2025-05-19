@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const httpProxy = require('http-proxy');
+const path = require('path');
 const { fetchJwtToken, getJwtToken } = require('./auth');
 require('./agent');
 
