@@ -158,7 +158,7 @@ Example response:
 
             try {
                 if (intent === "bill") {
-                    const res = await axios.get(`${process.env.SPRING_API_GATEWAY}/api/v1/bill?subscriberNo=${subscriberId}&month=${month}&year=${year}`, { headers });
+                    const res = await axios.get(`${process.env.GATEWAY}/api/v1/bill?subscriberNo=${subscriberId}&month=${month}&year=${year}`, { headers });
                     const bill = res.data;
                     botResponse = `Bill Summary:
 - Subscriber: ${subscriberId}
@@ -168,7 +168,7 @@ Example response:
 Would you like to see the detailed bill or proceed with payment?`;
 
                 } else if (intent === "bill-detailed") {
-                    const res = await axios.get(`${process.env.SPRING_API_GATEWAY}/api/v1/bill-detailed?subscriberNo=${subscriberId}&month=${month}&year=${year}&page=0&size=10`, { headers });
+                    const res = await axios.get(`${process.env.GATEWAY}/api/v1/bill-detailed?subscriberNo=${subscriberId}&month=${month}&year=${year}&page=0&size=10`, { headers });
                     const detail = res.data.content?.[0] || {};
                     botResponse = `Bill Details for ${month} ${year}:
 - Usage Type: ${detail.usageType}
@@ -180,7 +180,7 @@ Would you like to see the detailed bill or proceed with payment?`;
                         botResponse = "Please specify an amount for payment.";
                     } else {
                         console.log(amount);
-                        const res = await axios.post(`${process.env.SPRING_API_GATEWAY}/api/v1/pay`, {
+                        const res = await axios.post(`${process.env.GATEWAY}/api/v1/pay`, {
                             subscriberNo: subscriberId,
                             month,
                             year,
