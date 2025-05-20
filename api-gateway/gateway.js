@@ -3,7 +3,7 @@ const express = require('express');
 const httpProxy = require('http-proxy');
 const path = require('path');
 const { fetchJwtToken, getJwtToken } = require('./auth');
-require('./agent');
+//require('./agent');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
