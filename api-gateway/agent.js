@@ -1,14 +1,27 @@
+const fs = require('fs');
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 const { normalizeMessage } = require('./utils');
 //const OpenAI = require('openai'); MAYBE LATER
 const axios = require('axios');
 const { fetchJwtToken, getJwtToken } = require('./auth');
+const path = require('path');
 
 
+const firebaseKeyPath = '/etc/secrets/firebase-key.json';
+const firebaseConfig = JSON.parse(fs.readFileSync(firebaseKeyPath, 'utf8'));
+initializeApp({
+    credential: cert(firebaseConfig)
+});
 // Firebase setup
-initializeApp({ credential: cert(require('./firebase-key.json')) });
+//initializeApp({ credential: cert(require('/etc/secrets/firebase-key.json')) });,
+/* const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+
+initializeApp({
+    credential: cert(require(firebaseConfig))
+});*/
 const db = getFirestore();
+
 
 // OpenAI setup
 //const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });  MAYBE LATER
