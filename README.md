@@ -10,8 +10,7 @@ This project is a **chat-based assistant system** for a mobile provider billing 
 - **Live Frontend Deployment (Render):** [Chatbot UI](https://mobileproviderchatbot.onrender.com)
 - **Live API Gateway Deployment (Render):** [API Gateway](https://mobileprovidergateway-ufhx.onrender.com)
 - **Spring Boot API Deployment (Render):** [Spring API](https://mobile-provider-api.onrender.com)
-- **🎥 Project Demo Video:** [Watch on Google Drive](https://drive.google.com/your-demo-link-here)
-
+- **Project Demo Video:** [Watch on Google Drive](https://drive.google.com/drive/folders/1rY0ePM2BiBv2Xq1WmcE1I03ddwv3HUVS?usp=drive_link)
 ---
 
 ## System Design
