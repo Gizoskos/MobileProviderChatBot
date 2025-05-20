@@ -27,7 +27,7 @@ app.all('/api/*', (req, res) => {
       req.headers['Authorization'] = `Bearer ${token}`;
     }
   }
-  req.url = req.url.replace(/^\/api/, '');
+
 
   // spring api proxy
   proxy.web(req, res, { target: process.env.SPRING_API_URL }, (err) => {
