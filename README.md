@@ -32,6 +32,42 @@ Agent Service: Listens to Firestore changes, detects intent using Together.ai, a
 
 Spring Boot Backend: Handles business logic for billing, payments, and data persistence.
 ```
+## Environment Configuration
+
+### Secrets for API Gateway (Agent)
+
+```plaintext
+
+Instead of uploading `firebase-key.json`, it is stored securely in Render secrets:
+
+- `FIREBASE_CREDENTIAL`: Stringified JSON from `firebase-key.json`
+```json
+{ "type": "service_account", "project_id": "...", ... }
+
+In code:
+
+const credentialJson = JSON.parse(process.env.FIREBASE_CREDENTIAL);
+initializeApp({ credential: cert(credentialJson) });
+```
+### Environment Variables for React UI
+```plaintext
+The following variables are defined in Render for the React UI deployment:
+
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+VITE_FIREBASE_MEASUREMENT_ID=...
+These are used in firebaseConfig.js:
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  ...
+};
+```
 ## Assumptions
 ```plaintext
 User IDs are predefined and mapped to billing records in the Spring Boot backend.
@@ -48,6 +84,7 @@ Together.ai is used with a system prompt to parse structured JSON from free-form
 
 Frontend expects bot responses to be stored in the same Firestore collection with sender: "bot"
 ```
+
 
 ## Challenges Encountered
 ```plaintext
@@ -101,17 +138,17 @@ mvn spring-boot:run
 ## Technologies Used
 ```plaintext
 
-React.js + Tailwind CSS
+React.js + Tailwind CSS for the front-end
 
-Firebase Firestore (Database)
+Firebase Firestore (Database) for real-time message storage
 
 Firebase Admin SDK
 
-Node.js + Express + Axios
+Node.js + Express + Axios gateway and message agent services
 
-Spring Boot (Billing APIs)
+Spring Boot (Billing APIs) for billing logic and data APIs
 
-Together.ai (NLP/Intent Detection)
+Together.ai (LLM/Intent Detection) for intent extraction from user input
 
-Render.com (Hosting)
+Render.com (Hosting) for deployment
 ```
